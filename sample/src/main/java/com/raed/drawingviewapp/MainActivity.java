@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -19,6 +20,7 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.RadioButton;
 import android.widget.SeekBar;
+
 import com.raed.drawingview.BrushView;
 import com.raed.drawingview.DrawingView;
 import com.raed.drawingview.brushes.BrushSettings;
@@ -46,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
 
         mDrawingView = findViewById(R.id.drawing_view);
         mDrawingView.setUndoAndRedoEnable(true);
+        mDrawingView.setLinesColor(ContextCompat.getColor(this, R.color.colorPrimaryDark));
 
         BrushView brushView = findViewById(R.id.brush_view);
         brushView.setDrawingView(mDrawingView);
@@ -56,10 +59,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 BrushSettings brushSettings = mDrawingView.getBrushSettings();
-                brushSettings.setSelectedBrushSize(i/100f);
+                brushSettings.setSelectedBrushSize(i / 100f);
             }
-            public void onStartTrackingTouch(SeekBar seekBar) {}
-            public void onStopTrackingTouch(SeekBar seekBar) {}
+
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
         });
 
         findViewById(R.id.clear).setOnClickListener(new View.OnClickListener() {
@@ -96,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.set_background).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
+                if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                     ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 0);
                     return;
                 }
@@ -119,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.export).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
+                if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                     ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);//ignoring the request code
                     return;
                 }
@@ -131,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.export_without_bg).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
+                if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                     ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);//ignoring the request code
                     return;
                 }
@@ -165,7 +172,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE_IMPORT_IMAGE){
+        if (requestCode == REQUEST_CODE_IMPORT_IMAGE) {
             if (AppCompatActivity.RESULT_OK != resultCode)
                 return;
             try {
@@ -179,7 +186,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void setBrushSelected(int brushID){
+    private void setBrushSelected(int brushID) {
         BrushSettings settings = mDrawingView.getBrushSettings();
         settings.setSelectedBrush(brushID);
         int sizeInPercentage = (int) (settings.getSelectedBrushSize() * 100);
@@ -220,7 +227,7 @@ public class MainActivity extends AppCompatActivity {
         View.OnClickListener colorClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int color = ((ColorDrawable)view.getBackground()).getColor();
+                int color = ((ColorDrawable) view.getBackground()).getColor();
                 BrushSettings brushSettings = mDrawingView.getBrushSettings();
                 brushSettings.setColor(color);
             }
@@ -232,7 +239,7 @@ public class MainActivity extends AppCompatActivity {
         View.OnClickListener bgClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int color = ((ColorDrawable)view.getBackground()).getColor();
+                int color = ((ColorDrawable) view.getBackground()).getColor();
                 mDrawingView.setDrawingBackground(color);
             }
         };
